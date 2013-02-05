@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ライフゲーム</title>
+    <meta charset="utf-8" content="text/html" http-equiv="Content-Type">
+    </meta>
+
+    <link
+       href="./css/bootstrap.min.css"
+       rel="stylesheet">
+    <link
+       href="./css/life_game.css"
+       rel="stylesheet">
+
+    <script
+       src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"
+       type="text/javascript"></script>
+
+    <script
+       src="./js/lib.js"
+       type="text/javascript"></script>
+    <script
+       src="./js/panel.js"
+       type="text/javascript"></script>
+
+    <script
+       src="./js/life_game.js"
+       type="text/javascript"></script>
+    <script
+       src="./js/koch_curve.js"
+       type="text/javascript"></script>
+    <script
+       src="./js/mandelbrot.js"
+       type="text/javascript"></script>
+    <script
+       src="./js/burning_ship.js"
+       type="text/javascript"></script>
+
+    <script
+       src="./js/div_canvas.js"
+       type="text/javascript"></script>
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">(～・ω・)～(game_of_life)</a>
+          <ul class="nav">
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="hero-unit">
+        <h1>game-of-life</h1>
+      </div>
+      <div id="div_canvas">
+	<div class="input">
+          <select name="draw_select"
+		  id="draw_select">
+            <option value="">選べ</option>
+            <option value="life">ライフゲーム</option>
+            <option value="koch">コッホ曲線</option>
+            <option value="mandel">マンデルブロ集合</option>
+            <option value="burning">バーンシップフラクタル</option>
+            </select>
+	</div>
+
+	<button class="btn" id="draw_button">描画</button>
+	<button class="btn" id="start_life">スタート</button>
+
+	<canvas id="canvas_main" width="500" height="550"></canvas>
+      </div>
+    </div>
+
+    <footer class="foobar">
+      <div class="container">
+        <p>
+          this site maintained by
+          <a href="https://github.com/yuuhik/">ぎりたけ</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
