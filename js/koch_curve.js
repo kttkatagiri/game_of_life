@@ -27,10 +27,10 @@
     }
 
     if (n === 0) {
-      drawLine(ctx, p1, p3);
-      drawLine(ctx, p3, p5);
-      drawLine(ctx, p5, p4);
-      drawLine(ctx, p4, p2);
+      $draw.line(ctx, p1, p3);
+      $draw.line(ctx, p3, p5);
+      $draw.line(ctx, p5, p4);
+      $draw.line(ctx, p4, p2);
       return;
     }
     

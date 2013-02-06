@@ -11,7 +11,6 @@
       m_select_draw = $(this).val();
       switch(m_select_draw) {
       case 'life':
-        showLife();
         console.log('$().life_game();');
         break;
       case 'koch':
@@ -58,6 +57,9 @@
       case 'life':
         console.log('$().life_game();');
         $().life_game_init(m_canvas);
+        m_life_text.val(JSON.stringify(glider));
+        $().life_game_set_state(m_life_text);
+        showLife();
         break;
       case 'koch':
         console.log('koch_curve');
@@ -90,6 +92,7 @@
     });
     $('#exit_life').click(function(){
       $.fn.life_game_exit();
+      hideLife();
     });
     $('#save_life').click(function(){
       $().life_game_save(m_life_text);
