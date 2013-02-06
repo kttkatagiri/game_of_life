@@ -1,12 +1,12 @@
 (function($){
 
-  var Xtable = [];
+  var board = [];
   var loop = 500;
   var max = 500;
   var med = max/2;
-  var PosX = -0.033;
-  var PosY = - 1.755;
-  var Zoom = 0.079;
+  var positionX = -0.033;
+  var positionY = - 1.755;
+  var zoom = 0.079;
   var colorMax = 0;
 
   function drawBurningShip(ctx){
@@ -14,11 +14,11 @@
 
     for( var i=0 ; i<max ; i++ )
     {
-      a = PosY + Zoom * ( (i-med) / max );
-      Xtable[i] = new Array();
+      a = positionY + zoom * ( (i-med) / max );
+      board[i] = new Array();
       for( var j=0 ; j<max ; j++)
       {
-        b = PosX + Zoom * ( (j-med) / max );
+        b = positionX + zoom * ( (j-med) / max );
         x=0;y=0;
         for( var k=0 ; k<loop ; k++ )
         {
@@ -32,17 +32,17 @@
           if( x*x+y*y>4 ) break;
         }
         if(colorMax < k){ colorMax = k; }
-        Xtable[i][j] = k;
+        board[i][j] = k;
       }
     }
 
-    for(var i = 0; i < Xtable.length; i++) {
-      for(var j = 0; j < Xtable[i].length; j++) {
+    for(var i = 0; i < board.length; i++) {
+      for(var j = 0; j < board[i].length; j++) {
         ctx.beginPath();
         ctx.fillStyle =
-            'rgb(' + parseInt(255-Xtable[i][j]/colorMax * 255,10) + ',' +
-            parseInt(255-Xtable[i][j]/colorMax * 255, 10) + ',' +
-            parseInt(255-Xtable[i][j]/colorMax * 255,10) + ')';
+            'rgb(' + parseInt(255-board[i][j]/colorMax * 255,10) + ',' +
+            parseInt(255-board[i][j]/colorMax * 255, 10) + ',' +
+            parseInt(255-board[i][j]/colorMax * 255,10) + ')';
         ctx.fillRect(i, j, 1, 1);
         ctx.fill();
       }

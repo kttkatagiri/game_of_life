@@ -37,6 +37,11 @@
        type="text/javascript"></script>
 
     <script
+       src="./js/state.js"
+       type="text/javascript"></script>
+
+
+    <script
        src="./js/div_canvas.js"
        type="text/javascript"></script>
   </head>
@@ -67,11 +72,22 @@
             <option value="burning">バーンシップフラクタル</option>
             </select>
 	</div>
+	<div id="buttons">
+	  <button class="btn" id="draw_button">描画</button>
+	  <!-- <button class="btn" id="delete_button">消去</button> -->
+	  <button class="btn" id="start_life">スタート</button>
+	  <button class="btn" id="stop_life">一時停止</button>
+	  <button class="btn" id="reset_life">リセット</button>
+	  <button class="btn" id="exit_life">終了</button>
+	  <button class="btn" id="save_life">状態を保存</button>
+	  <button class="btn" id="restore_life">状態を復元</button>
+	  <button class="btn" id="pentadecathlon">pentadecathlon</button>
+	  <button class="btn" id="glider">glider</button>
+	</div>
+	<canvas id="canvas_main" width="800" height="500"></canvas>
 
-	<button class="btn" id="draw_button">描画</button>
-	<button class="btn" id="start_life">スタート</button>
-
-	<canvas id="canvas_main" width="500" height="550"></canvas>
+	<textarea id="life_text" class="span8">
+	</textarea>
       </div>
     </div>
 

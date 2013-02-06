@@ -1,10 +1,14 @@
 (function($) {
 
+  var m_power = false;
+
   var m_canvas = null;
   var m_ctx = null;
-  var m_width = 50;
+  var m_width = 80;
   var m_height = 50;
   var m_board = [];
+
+  var m_storage = localStorage;
 
   var check_survive = function(square) {
     // console.log(square);
@@ -13,19 +17,19 @@
        m_board[square.x - 1][square.y - 1].live) { ++live_count; }
     if((square.y - 1) >= 0 &&
        m_board[square.x][square.y - 1].live) { ++live_count; }
-    if((square.x + 1) < 50 && (square.y - 1)  >= 0 &&
+    if((square.x + 1) < m_width && (square.y - 1)  >= 0 &&
        m_board[square.x + 1][square.y - 1].live) { ++live_count; }
 
     if((square.x - 1) >= 0  &&
        m_board[square.x - 1][square.y].live) { ++live_count; }
-    if((square.x + 1) < 50 &&
+    if((square.x + 1) < m_width &&
        m_board[square.x + 1][square.y].live) { ++live_count; }
 
-    if((square.x - 1) >= 0 && (square.y + 1) < 50 &&
+    if((square.x - 1) >= 0 && (square.y + 1) < m_height &&
        m_board[square.x - 1][square.y + 1].live) { ++live_count; }
-    if((square.y + 1) < 50 &&
+    if((square.y + 1) < m_height &&
        m_board[square.x][square.y + 1].live) { ++live_count; }
-    if((square.x + 1 < 50) && (square.y + 1 < 50) &&
+    if((square.x + 1 < m_width) && (square.y + 1 < m_height) &&
        m_board[square.x + 1][square.y + 1].live) { ++live_count; }
 
     if (!square.live && live_count === 3) {
@@ -64,9 +68,11 @@
   };
 
   var life_game = function() {
-    check_survive_board();
-    advance_to_next_stage();
-    setTimeout(life_game, 100);
+    if(m_power) {
+      check_survive_board();
+      advance_to_next_stage();
+      setTimeout(life_game, 100);
+    }
   };
 
   var init_event = function () {
@@ -85,47 +91,116 @@
     // console.log('canvas_click',canvas_x,canvas_y);
 
     var canvas_height = $(m_canvas).height();
+    var canvas_width = $(m_canvas).width();
     var s_height = canvas_height / m_height;
+    var s_width = canvas_width / m_width;
+
 
     var x = parseInt(canvas_x/s_height);
-    var y = parseInt(canvas_y/s_height);
+    var y = parseInt(canvas_y/s_width);
     console.log('canvas_click',x,y);
     m_board[x][y].toggleState();
   };
 
   var init = function () {
     var canvas_height = $(m_canvas).height();
+    var canvas_width = $(m_canvas).width();
     var s_height = canvas_height / m_height;
+    var s_width = canvas_width / m_width;
     console.log(canvas_height,m_height,s_height);
+    console.log(canvas_width,m_width,s_width);
+
     m_board = [];
-    for(var i = 0; i < m_height; ++i) {
+    for(var i = 0; i < m_width; ++i) {
       m_board[i] = [];
       for(var j = 0; j < m_height; ++j) {
         m_board[i][j] = new Panel(i, j,
-                                  i * s_height, j * s_height,
-                                  s_height, s_height,
+                                  i * s_width, j * s_height,
+                                  s_width, s_height,
                                   m_ctx);
+        m_board[i][j].refresh();
       }
     }
   };
-
   var remove_life_game_event = function(){
     m_canvas.removeEventListener('click', canvas_click, false);
   };
 
+  var reset = function() {
+    for(var i = 0; i < m_width; ++i) {
+      for(var j = 0; j < m_height; ++j) {
+        m_board[i][j].dead();
+        m_board[i][j].advance();
+        m_board[i][j].refresh();
+      }
+    }    
+  };
+
+  // 初期化
   $.fn.life_game_init = function (canvas_main) {
     m_canvas = canvas_main;
     m_ctx =  canvas_main.getContext('2d');
+    remove_life_game_event();
     init();
     init_event();
-    m_ctx.fillStyle = '#111111';
-    m_ctx.fillRect(0, 0, 500, 500);
-
-    // life_game();
   };
+
+  // start
   $.fn.life_game = function() {
+    m_power = true;
     life_game();
   };
+
+  // reset
+  $.fn.life_game_reset = function() {
+    reset();
+    m_power = false;
+  };
+  // stop
+  $.fn.life_game_stop = function() {
+    m_power = false;
+  };
+  // exit
+  $.fn.life_game_exit = function() {
+    m_power = false;
+    reset();
+    remove_life_game_event();
+  };
+  
+  // save
+  $.fn.life_game_save = function(life_text) {
+    var output_json = [];
+    $.each(m_board, function(i){
+      output_json[i] = [];
+      $.each(m_board[i], function(j, panel){
+        output_json[i][j] = {
+          "x":panel.x,
+          "y":panel.y,
+          "live":panel.live,
+          "next":panel.next
+        };
+      });
+    });
+    life_text.val(JSON.stringify(output_json).replace("}", "}\n", 'g'));
+  };
+
+  // restore
+  $.fn.life_game_set_state = function(life_text) {
+    var set_data = JSON.parse(life_text.val());
+    $.each(set_data, function(i){
+      $.each(set_data[i], function(j){
+        var data = set_data[i][j];
+        m_board[i][j].restore({
+          "x":data.x,
+          "y":data.y,
+          "live":data.live,
+          "next":data.next
+        });
+         m_board[i][j].refresh();
+      });
+    });
+  };
+
   $.fn.life_game_debug = function () {
     console.log('m_board', m_board);
   };
