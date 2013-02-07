@@ -133,7 +133,7 @@
         m_board[i][j].advance();
         m_board[i][j].refresh();
       }
-    }    
+    }
   };
 
   // 初期化
