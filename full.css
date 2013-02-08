@@ -1,0 +1,14 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    /* position: absolute; */
+    position: relative;
+}
+
+body #div_canvas{
+    width: 100%;
+    /* position: fixed; */
+    osition: absolute;
+    left: 0;
+    top: 0;
+}
